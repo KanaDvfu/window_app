@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'customAppBar/custom_app_bar.dart';
 import 'listItem/task.dart';
 import 'listItem/list_item.dart';
+import 'custom_clipper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -74,8 +75,24 @@ class _HomePageState extends State<HomePage> {
     children: [
       Stack(
         children: [
-          SvgPicture.asset("assets/images/todolist_background.svg"),
-          SvgPicture.asset("assets/images/todolist.svg"),
+          Center(child: SvgPicture.asset("assets/images/todolist_background.svg")),
+          TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 1, end: 0),
+            duration: const Duration(milliseconds: 1000),
+            builder: (BuildContext context, double value, Widget? child) {
+              return Center(
+                child: ClipPath(
+                  clipper: Clipper(),
+                  child: AnimatedSlide(
+                    curve: Curves.easeOutCubic,
+                    offset: Offset(0, value),
+                    duration: const Duration(milliseconds: 1000),
+                    child: SvgPicture.asset("assets/images/todolist.svg"),
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
       const SizedBox(
