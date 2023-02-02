@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:window_app/customAppBar/custom_app_bar.dart';
+import 'customAppBar/custom_app_bar.dart';
 import 'listItem/task.dart';
 import 'listItem/list_item.dart';
 
@@ -37,18 +38,23 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: secondaryTaskList.isEmpty
             ? (emptyList)
-            : ListView.builder(
-                itemCount: secondaryTaskList.length,
-                itemBuilder: (context, index) {
-                  return ListItem(
-                    text: secondaryTaskList[index].text,
-                    index: index,
-                    task: secondaryTaskList[index],
-                    onComplete: (_) => completeListElement(secondaryTaskList[index].id),
-                    onFavorite: () => favoriteListElement(secondaryTaskList[index].id),
-                    onDelete: (_) => deleteListElement(secondaryTaskList[index].id),
-                  );
-                },
+            : Stack(
+                children: [
+                  background,
+                  ListView.builder(
+                    itemCount: secondaryTaskList.length,
+                    itemBuilder: (context, index) {
+                      return ListItem(
+                        text: secondaryTaskList[index].text,
+                        index: index,
+                        task: secondaryTaskList[index],
+                        onComplete: (_) => completeListElement(secondaryTaskList[index].id),
+                        onFavorite: () => favoriteListElement(secondaryTaskList[index].id),
+                        onDelete: (_) => deleteListElement(secondaryTaskList[index].id),
+                      );
+                    },
+                  ),
+                ],
               ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -62,8 +68,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// on empty list
-  final Widget emptyList = Column(
+  /// decorative elements
+  var emptyList = Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Stack(
@@ -79,6 +85,56 @@ class _HomePageState extends State<HomePage> {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
+      ),
+    ],
+  );
+
+  var background = Column(
+    children: const [
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
+      ),
+      Expanded(
+        child: Divider(thickness: 3, endIndent: 3, indent: 3),
       ),
     ],
   );
@@ -135,9 +191,12 @@ class _HomePageState extends State<HomePage> {
           key: formKey,
           child: TextFormField(
             controller: controller,
+            maxLengthEnforcement: MaxLengthEnforcement.none,
             maxLength: 40,
             validator: (text) {
-              return (text!.trimLeft().isEmpty) ? ('Название не может быть пустым') : (null);
+              return (text!.trimLeft().isEmpty)
+                  ? ('Название не может быть пустым')
+                  : ((text.length > 40) ? ('Слишком длинное название') : (null));
             },
             decoration: const InputDecoration(
               hintText: 'Введите название ветки',
@@ -220,10 +279,13 @@ class _HomePageState extends State<HomePage> {
           child: TextFormField(
             autofocus: true,
             validator: (text) {
-              return (text!.trimLeft().isEmpty) ? ('Название не может быть пустым') : (null);
+              return (text!.trimLeft().isEmpty)
+                  ? ('Название не может быть пустым')
+                  : ((text.length > 40) ? ('Слишком длинное название') : (null));
             },
             controller: controller,
             decoration: const InputDecoration(hintText: 'Введите название задачи'),
+            maxLengthEnforcement: MaxLengthEnforcement.none,
             maxLength: 40,
           ),
         ),
