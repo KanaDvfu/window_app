@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'to_do_list.dart';
 import 'customAppBar/custom_app_bar.dart';
 import 'listItem/task.dart';
 import 'listItem/list_item.dart';
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
             ? (emptyList)
             : Stack(
                 children: [
-                  background,
+                  background(),
                   ListView.builder(
                     itemCount: secondaryTaskList.length,
                     itemBuilder: (context, index) {
@@ -52,6 +53,7 @@ class _HomePageState extends State<HomePage> {
                         onComplete: (_) => completeListElement(secondaryTaskList[index].id),
                         onFavorite: () => favoriteListElement(secondaryTaskList[index].id),
                         onDelete: (_) => deleteListElement(secondaryTaskList[index].id),
+                        onOpenTodo: () => openTodoScreen(secondaryTaskList[index].id),
                       );
                     },
                   ),
@@ -106,54 +108,36 @@ class _HomePageState extends State<HomePage> {
     ],
   );
 
-  var background = Column(
-    children: const [
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-      Expanded(
-        child: Divider(thickness: 3, endIndent: 3, indent: 3),
-      ),
-    ],
+  Column background() {
+    return Column(
+      children: [
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+        bgDivider,
+      ],
+    );
+  }
+
+  Expanded bgDivider = const Expanded(
+    child: Divider(
+      thickness: 3,
+      indent: 15,
+      endIndent: 15,
+    ),
   );
 
   /// appbar interactions
@@ -332,5 +316,27 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  ///••••••••••••••••••••••••••••••••••///
+  ///•••••2nd labwork starts here:•••••///
+  ///••••••••••••••••••••••••••••••••••///
+
+  /// open to do list
+  void openTodoScreen(String taskId) {
+    String taskTitle = taskList.singleWhere((element) => element.id == taskId).text;
+    bool taskIsCompleted = taskList.singleWhere((element) => element.id == taskId).isCompleted;
+    bool taskIsFavorite = taskList.singleWhere((element) => element.id == taskId).isFavorite;
+
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => TodoScreen(
+          toDoTitle: taskTitle,
+          isDone: taskIsCompleted,
+          isFavorite: taskIsFavorite,
+          onTaskCompleted: () => completeListElement(taskId),
+        ),
+      ));
+    });
   }
 }
